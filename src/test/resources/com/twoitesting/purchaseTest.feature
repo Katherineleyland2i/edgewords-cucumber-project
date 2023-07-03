@@ -1,70 +1,60 @@
-Feature: Login
+Feature: Purchase test
 
-  Scenario: Login Test
+  Background: Be on the Ecommerce shop page
+    Given I am on the Ecommerce website shop page
+
+  Scenario Outline: Login Test
     Given I am on the Ecommerce website
-    When I login with username "ab@cd.com" and password "Frog1!Cats"
+    When I login with <username> and <password>
     Then I should be logged in
+    Examples:
+      | username    | password     |
+      | "ab@cd.com" | "Frog1!Cats" |
 
-Feature: Add to Cart
 
-  Scenario: Add Clothing Item to Cart
+  Scenario: Add Clothing Item to Cart and Add coupon
     Given I am on the Ecommerce website
-    And I am logged in
     When I go to the shop page
     And I add a clothing item to my cart
-    Then the item should be added to my cart
-
-Feature: Apply Coupon
-
-  Scenario: Apply Coupon Code
-    Given I am on the Ecommerce website
-    And I am logged in
-    And I have items in my cart
-    When I view the cart
+    And I view the cart
     And I apply a coupon code "Edgewords"
     Then the coupon should be applied successfully
 
-Feature: Checkout
 
   Scenario: Proceed to Checkout
-    Given I am on the Ecommerce website
-    And I am logged in
+    Given I am on the Ecommerce website shop page
     And I have items in my cart
     When I view the cart
     And I proceed to checkout
     Then I should be on the checkout page
 
-Feature: Complete Billing Details
 
   Scenario: Fill in Billing Details
+
+    Given I have items in my cart
     Given I am on the checkout page
     When I enter the billing details
     Then the details should be filled in successfully
 
-Feature: Payment Method
 
   Scenario: Select Check Payments
-    Given I am on the checkout page
-    When I select "Check payments" as the payment method
-    Then "Check payments" should be selected
 
-Feature: Place Order
-
-  Scenario: Place the Order
+    And I have items in my cart
     Given I am on the checkout page
-    When I place the order
+    And I have entered the billing details
+    When I select Check payments as the payment method
+    And I click to place the order
     Then the order should be placed successfully
 
-Feature: Order Number
 
   Scenario: Capture and Verify Order Number
-    Given I have placed an order
+    Given I am logged in
+    And I have placed an order
     When I capture the order number
-    And I go to "My Account" page
-    And I select "Orders"
-    Then the order number should be displayed
+    And I go to My Account page
+    And I select Orders
+    Then the same order number should be displayed
 
-Feature: Logout
 
   Scenario: Logout from Account
     Given I am logged in
