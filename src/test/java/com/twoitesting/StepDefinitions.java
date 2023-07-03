@@ -24,8 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StepDefinitions {
     WebDriver driver;
-
-    ;
+    private int orderNumberOrderReceivedPage;
 
     @Before//Runs before each and every scenario
     public void setUp() {
@@ -251,12 +250,10 @@ public class StepDefinitions {
     }
 
     @When("I capture the order number")
-    public int iCaptureTheOrderNumber() {
+    public void iCaptureTheOrderNumber() {
         OrderReceivedPage orderReceivedPage = new OrderReceivedPage(driver);
-        int orderNumberOrderReceivedPage = orderReceivedPage.getOrderNumber();
-        return orderNumberOrderReceivedPage;
+        orderNumberOrderReceivedPage = orderReceivedPage.getOrderNumber();
     }
-private int orderNumberOrderReceivedPage;
 
     @And("I go to My Account page")
     public void iGoToMyAccountPage() {
