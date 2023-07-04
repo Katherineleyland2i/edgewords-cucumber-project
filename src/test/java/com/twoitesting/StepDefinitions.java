@@ -135,7 +135,7 @@ public class StepDefinitions {
         myWait.until(ExpectedConditions.visibilityOfElementLocated(cartPage.couponCodeField));
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0,250)", "");
-        cartPage.addCoupon("Edgewords");
+        cartPage.addCoupon(couponcode);
     }
 
     @Then("the coupon should be applied successfully")
