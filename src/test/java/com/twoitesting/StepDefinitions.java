@@ -26,15 +26,15 @@ public class StepDefinitions {
     WebDriver driver;
     private int orderNumberOrderReceivedPage;
 
-    @Before//Runs before each and every scenario
+    @Before
     public void setUp() {
         driver = new ChromeDriver();
     }
 
-    @After //Runs after each and every scenario - even if steps in the scenario fail
+    @After
     public void tearDown() throws InterruptedException {
-        Thread.sleep(2000); //Just so we can observe the results, keep the browser open for 2 secs
-        driver.quit(); //before cleanup (quit)
+        Thread.sleep(2000);
+        driver.quit();
     }
 
     @Given("I am on the Ecommerce website")
@@ -66,7 +66,7 @@ public class StepDefinitions {
     }
 
     @And("I add a clothing item to my cart")
-    @And ("I have items in my cart")
+    @And("I have items in my cart")
     public void iAddAClothingItemToMyCart() {
         NavBarPage navBarPage = new NavBarPage(driver);
         navBarPage.clickShop();
@@ -83,13 +83,13 @@ public class StepDefinitions {
         shopPage.clickItem();
         myWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[title='View cart']")));
 
-//        try{
-//            String bodyText = String.valueOf(driver.findElement(By.linkText("Your cart is currently empty.")));
-//            Assert.assertFalse(bodyText.contains("Your cart is currently empty."));}
-//        catch(Exception e){
-//            System.out.println("No items in the cart");
-//
-//        }
+        try{
+            String bodyText = String.valueOf(driver.findElement(By.linkText("Your cart is currently empty.")));
+            Assert.assertFalse(bodyText.contains("Your cart is currently empty."));}
+        catch(Exception e){
+            System.out.println("Items in the cart");
+
+        }
     }
 
     @Then("the item should be added to my cart")
@@ -109,8 +109,7 @@ public class StepDefinitions {
 
     @Then("I should be logged out")
     public void iShouldBeLoggedOut() {
-        assertThat(driver.findElement(By.linkText("Log in")).isDisplayed(), is(true));
-
+        Verify.verify(true, "Not Logged out Successfully", "Login", By.className("h2"));
     }
 
     @When("I login with {string} and {string}")
@@ -120,7 +119,6 @@ public class StepDefinitions {
         loginPage.enterPassword(password);
         loginPage.findLogin();
         loginPage.clickLogin();
-
     }
 
 
@@ -157,19 +155,18 @@ public class StepDefinitions {
     public void iProceedToCheckout() {
         CartPage cartPage = new CartPage(driver);
         cartPage.getCheckoutPage();
-        CheckoutPage checkoutpage = new CheckoutPage(driver);
     }
 
     @Then("I should be on the checkout page")
     public void iShouldBeOnTheCheckoutPage() {
-        CheckoutPage checkoutpage = new CheckoutPage(driver);
-       try {
-           String bodyText = String.valueOf(driver.findElement(By.linkText("Your cart is currently empty.")));
+       new CheckoutPage(driver);
+        try {
+            String bodyText = String.valueOf(driver.findElement(By.linkText("Your cart is currently empty.")));
 
-        Assert.assertFalse(bodyText.contains("Your cart is currently empty."));}
-       catch (Exception e){
-           System.out.println("Cart occupied");
-       }
+            Assert.assertFalse(bodyText.contains("Your cart is currently empty."));
+        } catch (Exception e) {
+            System.out.println("Cart occupied");
+        }
     }
 
     @Given("I am on the checkout page")
@@ -177,7 +174,7 @@ public class StepDefinitions {
         driver.get("https://www.edgewordstraining.co.uk/demo-site/my-account/");
         NavBarPage navBarPage = new NavBarPage(driver);
         navBarPage.clickCheckout();
-        CheckoutPage checkoutpage = new CheckoutPage(driver);
+                new CheckoutPage(driver);
         Verify.verify(true, "Not on Checkout Page", "Checkout", By.className("h1"));
     }
 
@@ -193,9 +190,9 @@ public class StepDefinitions {
         checkoutpage.setPostcode("EH6 4ZL");
         checkoutpage.setEmail("ab@cd.com");
         checkoutpage.setPhone("0131123456");
-        try{
-        checkoutpage.setNewPassword("PAssWord!");}
-        catch (Exception e){
+        try {
+            checkoutpage.setNewPassword("PAssWord!");
+        } catch (Exception e) {
             System.out.println("Already logged in");
         }
     }
@@ -204,11 +201,9 @@ public class StepDefinitions {
 
     public void theDetailsShouldBeFilledInSuccessfully() {
         CheckoutPage checkoutpage = new CheckoutPage(driver);
-        Verify.verify(true, "First name field not Bob","Bob", checkoutpage.billingFirstnameField);
-        Verify.verify(true, "Phone number field not as expected","0131123456", checkoutpage.phoneField);
+        Verify.verify(true, "First name field not Bob", "Bob", checkoutpage.billingFirstnameField);
+        Verify.verify(true, "Phone number field not as expected", "0131123456", checkoutpage.phoneField);
     }
-
-
 
 
     @When("I click to place the order")
@@ -232,21 +227,9 @@ public class StepDefinitions {
         myWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[title='View cart']")));
 
         navBarPage.clickCheckout();
-        CheckoutPage checkoutpage = new CheckoutPage(driver);
-        checkoutpage.setFirstName("Bob");
-        checkoutpage.setLastName("Smith");
-        checkoutpage.setCountryRegion("GB");
-        checkoutpage.setStreet("64 Zoo Lane");
-        checkoutpage.setTown("Edinburgh");
-        checkoutpage.setPostcode("EH6 4ZL");
-        checkoutpage.setEmail("ab@cd.com");
-        checkoutpage.setPhone("0131123456");
-        try{
-            checkoutpage.setNewPassword("PAssWord!");}
-        catch (Exception e){
-            System.out.println("Already logged in");
-        }
-        checkoutpage.clickPlaceOrder();
+        iEnterTheBillingDetails();
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
+        checkoutPage.clickPlaceOrder();
     }
 
     @When("I capture the order number")
@@ -258,8 +241,8 @@ public class StepDefinitions {
     @And("I go to My Account page")
     public void iGoToMyAccountPage() {
         NavBarPage navBarPage = new NavBarPage(driver);
-       WebDriverWait myWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-                myWait.until(ExpectedConditions.elementToBeClickable(By.linkText("My account")));
+        WebDriverWait myWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        myWait.until(ExpectedConditions.elementToBeClickable(By.linkText("My account")));
 
         navBarPage.clickMyAccount();
         myWait.equals(5000);
@@ -274,7 +257,7 @@ public class StepDefinitions {
     @Then("the same order number should be displayed")
     public void theSameOrderNumberShouldBeDisplayed() {
 
-        OrdersPage ordersPage = new OrdersPage(driver);
+                new OrdersPage(driver);
 
         String actualString = driver.findElement
                         (By.cssSelector("#post-7 > div > div > div > table > tbody > tr:nth-child(1) > td.woocommerce-orders-table__cell.woocommerce-orders-table__cell-order-number > a"))
@@ -289,7 +272,8 @@ public class StepDefinitions {
 
 
     @Given("I am on the Ecommerce website shop page")
-    public void iAmOnTheEcommerceWebsiteShopPage() {driver.get("https://www.edgewordstraining.co.uk/demo-site/shop");
+    public void iAmOnTheEcommerceWebsiteShopPage() {
+        driver.get("https://www.edgewordstraining.co.uk/demo-site/shop");
     }
 
     @When("I select Check payments as the payment method")
