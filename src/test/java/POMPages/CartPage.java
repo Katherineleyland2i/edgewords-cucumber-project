@@ -47,19 +47,17 @@ public class CartPage {
     public int checkSubTotal() {
         String subTotal = driver.findElement(getSubTotal).getText();
         String cleanSubTotal = subTotal.replaceAll("[^0-9]", "");
-        int subTotalInt = Integer.parseInt(cleanSubTotal);
-        return subTotalInt;
+        return Integer.parseInt(cleanSubTotal);
     }
 
     public int checkTotal() {
         String total = driver.findElement(getTotal).getText();
         String cleanTotal = total.replaceAll("[^0-9]", "");
-        int totalInt = Integer.parseInt(cleanTotal);
-        return totalInt;
+        return Integer.parseInt(cleanTotal);
     }
 
 
-    public CheckoutPage getCheckoutPage() {
+    public void getCheckoutPage() {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0,500)", "");
         WebElement checkout = driver.findElement(linkText("Proceed to checkout"));
@@ -72,7 +70,6 @@ public class CartPage {
         WebDriverWait myWait = new WebDriverWait(driver, Duration.ofSeconds(5));
         myWait.until(ExpectedConditions.elementToBeClickable(proceedToCheckoutButton));
         driver.findElement(proceedToCheckoutButton).click();
-        return new CheckoutPage(driver);
     }
 }
 
