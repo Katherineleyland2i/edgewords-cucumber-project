@@ -245,7 +245,6 @@ public class StepDefinitions {
         myWait.until(ExpectedConditions.elementToBeClickable(By.linkText("My account")));
 
         navBarPage.clickMyAccount();
-        myWait.equals(5000);
     }
 
     @And("I select Orders")
