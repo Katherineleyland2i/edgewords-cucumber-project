@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class StepDefinitions {
     WebDriver driver;
     private int orderNumberOrderReceivedPage;
+    NavBarPage navBarPage = new NavBarPage(driver);
 
     @Before
     public void setUp() {
@@ -60,7 +61,6 @@ public class StepDefinitions {
 
     @When("I go to the shop page")
     public void iGoToTheShopPage() {
-        NavBarPage navBarPage = new NavBarPage(driver);
         navBarPage.clickShop();
 
     }
@@ -83,19 +83,13 @@ public class StepDefinitions {
         shopPage.clickItem();
         myWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[title='View cart']")));
 
-        try{
+        try {
             String bodyText = String.valueOf(driver.findElement(By.linkText("Your cart is currently empty.")));
-            Assert.assertFalse(bodyText.contains("Your cart is currently empty."));}
-        catch(Exception e){
+            Assert.assertFalse(bodyText.contains("Your cart is currently empty."));
+        } catch (Exception e) {
             System.out.println("Items in the cart");
 
         }
-    }
-
-    @Then("the item should be added to my cart")
-    public void theItemShouldBeAddedToMyCart() {
-        //verify item is in cart could nav to cart and check or ascertain the shopping cart total has changed
-
     }
 
     @When("I logout")
@@ -104,7 +98,6 @@ public class StepDefinitions {
         js.executeScript("window.scrollBy(0,250)", "");
         MyAccountPage myAccountPage = new MyAccountPage(driver);
         myAccountPage.clickLogout();
-
     }
 
     @Then("I should be logged out")
@@ -159,7 +152,7 @@ public class StepDefinitions {
 
     @Then("I should be on the checkout page")
     public void iShouldBeOnTheCheckoutPage() {
-       new CheckoutPage(driver);
+        new CheckoutPage(driver);
         try {
             String bodyText = String.valueOf(driver.findElement(By.linkText("Your cart is currently empty.")));
 
@@ -174,7 +167,7 @@ public class StepDefinitions {
         driver.get("https://www.edgewordstraining.co.uk/demo-site/my-account/");
         NavBarPage navBarPage = new NavBarPage(driver);
         navBarPage.clickCheckout();
-                new CheckoutPage(driver);
+        new CheckoutPage(driver);
         Verify.verify(true, "Not on Checkout Page", "Checkout", By.className("h1"));
     }
 
@@ -256,8 +249,6 @@ public class StepDefinitions {
     @Then("the same order number should be displayed")
     public void theSameOrderNumberShouldBeDisplayed() {
 
-                new OrdersPage(driver);
-
         String actualString = driver.findElement
                         (By.cssSelector("#post-7 > div > div > div > table > tbody > tr:nth-child(1) > td.woocommerce-orders-table__cell.woocommerce-orders-table__cell-order-number > a"))
                 .getText();
@@ -279,5 +270,13 @@ public class StepDefinitions {
     public void iSelectCheckPaymentsAsThePaymentMethod() {
         CheckoutPage checkoutpage = new CheckoutPage(driver);
         checkoutpage.clickCheckPayment();
+    }
+
+    @Then("The displayed total after discount and shipping is correct")
+    public void theDisplayedTotalAfterDiscountAndShippingIsCorrect() {
+        CartPage cartPage = new CartPage(driver);
+        int shipping = 395;
+        int totalShouldBe = cartPage.checkSubTotal() + shipping - cartPage.checkDiscount();
+        Verify.verify(true, "Total incorrect", totalShouldBe, cartPage.checkTotal());
     }
 }

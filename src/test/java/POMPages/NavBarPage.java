@@ -25,7 +25,6 @@ public class NavBarPage {
         return new CartPage(driver);
     }
     public MyAccountPage clickMyAccount(){
-        //clickLink("My account");
         int maxAttempts = 3;
         int attempt = 0;
         while (attempt < maxAttempts) {

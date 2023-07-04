@@ -13,13 +13,17 @@ Feature: Purchase test
 
 
   Scenario: Add Clothing Item to Cart and Add coupon
-    Given I am on the Ecommerce website
-    When I go to the shop page
-    And I add a clothing item to my cart
+    Given I am on the Ecommerce website shop page
+    When I add a clothing item to my cart
     And I view the cart
     And I apply a coupon code "Edgewords"
     Then the coupon should be applied successfully
 
+  Scenario: Check totals in cart are correct
+    Given I have items in my cart
+    When I view the cart
+    And I apply a coupon code "Edgewords"
+    Then The displayed total after discount and shipping is correct
 
   Scenario: Proceed to Checkout
     Given I am on the Ecommerce website shop page
@@ -30,7 +34,6 @@ Feature: Purchase test
 
 
   Scenario: Fill in Billing Details
-
     Given I have items in my cart
     Given I am on the checkout page
     When I enter the billing details
@@ -38,7 +41,6 @@ Feature: Purchase test
 
 
   Scenario: Select Check Payments
-
     And I have items in my cart
     Given I am on the checkout page
     And I have entered the billing details

@@ -36,8 +36,9 @@ public class CartPage {
     }
 
     public int checkDiscount() {
+        WebDriverWait myWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        myWait.until(ExpectedConditions.visibilityOfElementLocated(getDiscount));
         String discount = driver.findElement(getDiscount).getText();
-        //System.out.println("Discount = " + discount);
         String cleanDiscount = discount.replaceAll("[^0-9]", "");
         int discountInt = Integer.parseInt(cleanDiscount);
         return discountInt;
@@ -45,7 +46,6 @@ public class CartPage {
 
     public int checkSubTotal() {
         String subTotal = driver.findElement(getSubTotal).getText();
-        // System.out.println("Subtotal = " + subTotal);
         String cleanSubTotal = subTotal.replaceAll("[^0-9]", "");
         int subTotalInt = Integer.parseInt(cleanSubTotal);
         return subTotalInt;
@@ -53,7 +53,6 @@ public class CartPage {
 
     public int checkTotal() {
         String total = driver.findElement(getTotal).getText();
-        //System.out.println("Total = " + total);
         String cleanTotal = total.replaceAll("[^0-9]", "");
         int totalInt = Integer.parseInt(cleanTotal);
         return totalInt;
@@ -70,7 +69,7 @@ public class CartPage {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-       WebDriverWait myWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebDriverWait myWait = new WebDriverWait(driver, Duration.ofSeconds(5));
         myWait.until(ExpectedConditions.elementToBeClickable(proceedToCheckoutButton));
         driver.findElement(proceedToCheckoutButton).click();
         return new CheckoutPage(driver);
