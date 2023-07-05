@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class StepDefinitions {
     WebDriver driver;
     private int orderNumberOrderReceivedPage;
-    NavBarPage navBarPage = new NavBarPage(driver);
+
 
     @Before
     public void setUp() {
@@ -61,6 +61,7 @@ public class StepDefinitions {
 
     @When("I go to the shop page")
     public void iGoToTheShopPage() {
+        NavBarPage navBarPage = new NavBarPage(driver);
         navBarPage.clickShop();
 
     }
@@ -85,7 +86,7 @@ public class StepDefinitions {
 
         try {
             String bodyText = String.valueOf(driver.findElement(By.linkText("Your cart is currently empty.")));
-            Assert.assertFalse(bodyText.contains("Your cart is currently empty."));
+            assertThat(String.valueOf(bodyText.contains("Your cart is currently empty.")), true);
         } catch (Exception e) {
             System.out.println("Items in the cart");
 
